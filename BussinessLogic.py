@@ -47,3 +47,47 @@ class CheckingAccount(Account):
         else:
             self._currentBalance -= withdrawnmoney
             return withdrawnmoney
+
+class Bank:
+    def __init__(self):
+        print('Welcome to the bank!')
+        self.nested_list_of_Accounts = [] 
+        self.new_account = None 
+    def makelist(self):            
+        for i in range(3 ):
+            account_type = input('what is your account type? ')
+            accountno = int(input('enter accountno; '))
+            name = input('account holder name; ')
+            rate_of_interest = int(input('enter rate of interest; '))
+            Current_balance = int(input('enter the current balance of the account; '))  
+            #accountlist = [account_type, accountno, name, rate_of_interest, Current_balance]
+            if(account_type.lower() == "savings"):
+                minimum_balance = int(input("enter the minimum balance of the account: "))
+                self.new_account = SavingsAccount(accountno, name, rate_of_interest, Current_balance, minimum_balance)
+            elif(account_type.lower() == "checking"):
+                overdrafts = int(input("enter the overdrafts of the account: "))
+                self.new_account = CheckingAccount(accountno, name, rate_of_interest, Current_balance,overdrafts)
+            else:
+                pass 
+            self.nested_list_of_Accounts.append(self.new_account)
+    def getlist(self):
+        return self.nested_list_of_Accounts
+    def searchAccount(self, accountno ):
+        for account in self.nested_list_of_Accounts:
+            if(account.getAccountNumber() == accountno):
+                return account
+    def openAccount(self, account_type, accountno, name, Rate_of_interest, currentBalance):
+        if(account_type.lower() == "savings"):
+            minimum_balance = int(input("enter the minimum balance of the account: "))
+            self.new_account = SavingsAccount(accountno, name, Rate_of_interest, currentBalance, minimum_balance)
+        elif(account_type.lower() == "checking"):
+            overdrafts = int(input("enter the overdrafts of the account: "))
+            self.new_account = CheckingAccount(accountno, name, Rate_of_interest, currentBalance,overdrafts)
+        else:
+            pass 
+        self.nested_list_of_Accounts.append(self.new_account)
+        return self.nested_list_of_Accounts
+    def addDeposit(self, account_number, money):
+        for account in self.nested_list_of_Accounts:
+            if(account.getAccountNumber() == account_number):
+                account.deposit(money)
