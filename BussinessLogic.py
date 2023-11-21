@@ -25,3 +25,14 @@ class Account:
         return self._currentBalance
     def getAccountType(self):
         return self._accountType
+
+class SavingsAccount(Account):
+    def __init__(self, accountNumber, accountHolderName, rateOfInterest, currentBalance, minimumBalance):
+        super().__init__('savings',accountNumber, accountHolderName, rateOfInterest, currentBalance)
+        self._minimumBalance = minimumBalance
+    def withdraw(self, withdrawnMoney):
+        if self._currentBalance - withdrawnMoney < self._minimumBalance:
+            return 'Transaction Rejected'
+        else:
+            self._currentBalance-=withdrawnMoney
+            return withdrawnMoney
