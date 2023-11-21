@@ -48,65 +48,93 @@ class CheckingAccount(Account):   #HAS-A relationship
             self._currentBalance -= withdrawnmoney
             return withdrawnmoney
 
-class Bank():            #HAS-A relationship
+class Bank(Account):
     def __init__(self):
         print('Welcome to the bank!')
         self.nested_list_of_Accounts = []
         self.new_account = None
+
     def makelist(self):
-        try:                       #exception handling 
-            for i in range(6):
-                account_type = input('Enter Account Type: ')
+        for i in range(6):
+            try:
+                account_type = input('Enter Account Type (savings/checking): ').lower()
                 accountno = int(input('Enter Account Number: '))
                 name = input('Enter Account Holder Name: ')
-                rate_of_interest = int(input('Enter rate of interest: '))
-                Current_balance = int(input('Enter the current balance of the account: '))  
-                if(account_type.lower() == "savings"):
-                    minimum_balance = int(input("Enter the minimum balance of the account: "))
-                    self.new_account = SavingsAccount(accountno, name, rate_of_interest, Current_balance, minimum_balance)
+                rate_of_interest = float(input('Enter rate of interest: '))
+                current_balance = float(input('Enter the current balance of the account: '))
                 
-                elif(account_type.lower() == "checking"):
-                    overdrafts = int(input("Enter the overdraft limit of the account: "))
-                    self.new_account = CheckingAccount(accountno, name, rate_of_interest, Current_balance,overdrafts)
-            
-                else:
-                    return None        
-            self.nested_list_of_Accounts.append(self.new_account)
+                if account_type not in ["savings", "checking"]:
+                    print("Invalid account type. Skipping account creation.")
+                    continue
 
-        except ValueError:
-            print("Invalid input. Please enter a valid number.")
-            
+                if current_balance < 0:
+                    print("Invalid current balance. Skipping account creation.")
+                    continue
+
+                if account_type == "savings":
+                    minimum_balance = float(input("Enter the minimum balance of the account: "))
+                    if minimum_balance < 0:
+                        print("Invalid minimum balance. Skipping account creation.")
+                        continue
+                    self.new_account = SavingsAccount(accountno, name, rate_of_interest, current_balance, minimum_balance)
+                elif account_type == "checking":
+                    overdrafts = float(input("Enter the overdraft limit of the account: "))
+                    if overdrafts < 0:
+                        print("Invalid overdraft limit. Skipping account creation.")
+                        continue
+                    self.new_account = CheckingAccount(accountno, name, rate_of_interest, current_balance, overdrafts)
+
+                self.nested_list_of_Accounts.append(self.new_account)
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+
     def getlist(self):
         return self.nested_list_of_Accounts
-    
-    def searchAccount(self, accountno):
-        for account in self.nested_list_of_Accounts:            
-            if(account.getAccountNumber() == accountno):
-                return account
-        return None 
-    
-    def openAccount(self, account_type, accountno, name, Rate_of_interest, currentBalance):
-        try:
-            if(account_type == "savings"):
-                minimum_balance = int(input("enter the minimum balance of the account: "))
-                new_account = SavingsAccount(accountno, name, Rate_of_interest, currentBalance, minimum_balance)
-        
-            elif(account_type == "checking"):
-                overdrafts = int(input("enter the overdrafts of the account: "))
-                new_account = CheckingAccount(accountno, name, Rate_of_interest, currentBalance,overdrafts)
 
+    def searchAccount(self, accountno):
+        for account in self.nested_list_of_Accounts:
+            if account.getAccountNumber() == accountno:
+                return account
+        return None
+
+    def openAccount(self, account_type, accountno, name, rate_of_interest, current_balance):
+        try:
+            if account_type.lower() not in ["savings", "checking"]:
+                print("Invalid account type. Account not created.")
+                return None
+
+            if current_balance < 0:
+                print("Invalid current balance. Account not created.")
+                return None
+
+            if account_type.lower() == "savings":
+                minimum_balance = float(input("Enter the minimum balance of the account: "))
+                if minimum_balance < 0:
+                    print("Invalid minimum balance. Account not created.")
+                    return None
+                new_account = SavingsAccount(accountno, name, rate_of_interest, current_balance, minimum_balance)
+            elif account_type.lower() == "checking":
+                overdrafts = float(input("Enter the overdrafts of the account: "))
+                if overdrafts < 0:
+                    print("Invalid overdraft limit. Account not created.")
+                    return None
+                new_account = CheckingAccount(accountno, name, rate_of_interest, current_balance, overdrafts)
             else:
-                return None 
-        
+                print("Invalid account type. Account not created.")
+                return None
+
             self.nested_list_of_Accounts.append(new_account)
             return self.nested_list_of_Accounts
         except ValueError:
             print("Invalid input. Please enter a valid number.")
             return None
-    
+
     def addDeposit(self, account_number, money):
         for account in self.nested_list_of_Accounts:
-            if(account.getAccountNumber == account_number):
+            if account.getAccountNumber() == account_number:
+                if money < 0:
+                    print("Invalid deposit amount. Transaction not allowed.")
+                    return False
                 account.deposit(money)
-                return  True
+                return True
         return False
