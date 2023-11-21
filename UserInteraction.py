@@ -46,3 +46,6 @@ def showAccountMenu(accountno,bank):
         else:
             print('Exiting the account')
             break
+
+application = Application()
+application.showMainMenu()
