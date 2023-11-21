@@ -48,7 +48,7 @@ class CheckingAccount(Account):   #HAS-A relationship
             self._currentBalance -= withdrawnmoney
             return withdrawnmoney
 
-class Bank(Account):            #HAS-A relationship
+class Bank():            #HAS-A relationship
     def __init__(self):
         print('Welcome to the bank!')
         self.nested_list_of_Accounts = []
