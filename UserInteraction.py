@@ -4,12 +4,12 @@ class Application:
         bank = Bank()
         print(bank.makelist())       
         while True:
-            try:
+            try:            #exception handling 
                 choice = int(input('enter choice from 1.select account, 2.open account, 3.Exit; '))
-                if choice == 1:
+                if choice == 1:        #search an account and call the function from the bank class in the business logic foile
                     accountno = int(input('enter the account number of the account that you want to search; '))
                     print(bank.searchAccount(accountno, Account))
-                    showAccountMenu(accountno,bank) 
+                    showAccountMenu(accountno,bank)          #call the function in the main module
                 elif choice == 2:
                     account_type = input('Enter the account type: ')
                     accountno = int(input('Enter the account number: '))
@@ -30,15 +30,15 @@ def showAccountMenu(accountno,bank):
     while True:
         try:
             choice = int(input('Enter choice from 1.check balance, 2.deposit, 3.withdraw, 4.Exit account: '))
-            if choice == 1:
+            if choice == 1:                #get the current balance of the selected account
                 for account in bank.getlist():
-                    if account.getAccountNumber() == accountno:
+                    if account.getAccountNumber() == accountno:        
                         print('The current balance of the account is', account.getCurrentBalance())
-            elif choice ==2:
+            elif choice ==2:               #deposit money 
                 money = int(input('enter the money to be deposited: '))
                 bank.addDeposit(accountno,money)
                 print(bank.getlist())
-            elif choice == 3:
+            elif choice == 3:              #withdrawn money
                 account = bank.searchAccount(accountno, Account)
                 account_type = account.getAccountType()
                 money = int(input('enter the amount of money to be withdrawn; '))
@@ -47,7 +47,7 @@ def showAccountMenu(accountno,bank):
                     print(result)
                 else:
                     print(result, 'withdrawn.')      
-            else:
+            else:                         #exiting the account 
                 print('Exiting the account')
                 break
         except ValueError:
