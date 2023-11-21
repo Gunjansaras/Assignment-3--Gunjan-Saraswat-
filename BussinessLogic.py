@@ -53,25 +53,28 @@ class Bank(Account):
         print('Welcome to the bank!')
         self.nested_list_of_Accounts = []
         self.new_account = None
-    def makelist(self):            
-        for i in range(6):
-            account_type = input('Enter Account Type: ')
-            accountno = int(input('Enter Account Number: '))
-            name = input('Enter Account Holder Name: ')
-            rate_of_interest = int(input('Enter rate of interest: '))
-            Current_balance = int(input('Enter the current balance of the account: '))  
-            if(account_type.lower() == "savings"):
-                minimum_balance = int(input("Enter the minimum balance of the account: "))
-                self.new_account = SavingsAccount(accountno, name, rate_of_interest, Current_balance, minimum_balance)
+    def makelist(self):
+        try:           
+            for i in range(6):
+                account_type = input('Enter Account Type: ')
+                accountno = int(input('Enter Account Number: '))
+                name = input('Enter Account Holder Name: ')
+                rate_of_interest = int(input('Enter rate of interest: '))
+                Current_balance = int(input('Enter the current balance of the account: '))  
+                if(account_type.lower() == "savings"):
+                    minimum_balance = int(input("Enter the minimum balance of the account: "))
+                    self.new_account = SavingsAccount(accountno, name, rate_of_interest, Current_balance, minimum_balance)
                 
-            elif(account_type.lower() == "checking"):
-                overdrafts = int(input("Enter the overdraft limit of the account: "))
-                self.new_account = CheckingAccount(accountno, name, rate_of_interest, Current_balance,overdrafts)
+                elif(account_type.lower() == "checking"):
+                    overdrafts = int(input("Enter the overdraft limit of the account: "))
+                    self.new_account = CheckingAccount(accountno, name, rate_of_interest, Current_balance,overdrafts)
             
-            else:
-                return None
+                else:
+                    return None
         
             self.nested_list_of_Accounts.append(self.new_account)
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
             
     def getlist(self):
         return self.nested_list_of_Accounts
@@ -81,19 +84,23 @@ class Bank(Account):
                 return account
         return None 
     def openAccount(self, account_type, accountno, name, Rate_of_interest, currentBalance):
-        if(account_type == "savings"):
-            minimum_balance = int(input("enter the minimum balance of the account: "))
-            new_account = SavingsAccount(accountno, name, Rate_of_interest, currentBalance, minimum_balance)
+        try:
+            if(account_type == "savings"):
+                minimum_balance = int(input("enter the minimum balance of the account: "))
+                new_account = SavingsAccount(accountno, name, Rate_of_interest, currentBalance, minimum_balance)
         
-        elif(account_type == "checking"):
-            overdrafts = int(input("enter the overdrafts of the account: "))
-            new_account = CheckingAccount(accountno, name, Rate_of_interest, currentBalance,overdrafts)
+            elif(account_type == "checking"):
+                overdrafts = int(input("enter the overdrafts of the account: "))
+                new_account = CheckingAccount(accountno, name, Rate_of_interest, currentBalance,overdrafts)
 
-        else:
-            return None 
+            else:
+                return None 
         
-        self.nested_list_of_Accounts.append(new_account)
-        return self.nested_list_of_Accounts
+            self.nested_list_of_Accounts.append(new_account)
+            return self.nested_list_of_Accounts
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+            return None
     
     def addDeposit(self, account_number, money):
         for account in self.nested_list_of_Accounts:
