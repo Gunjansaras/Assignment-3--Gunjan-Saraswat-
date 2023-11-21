@@ -36,3 +36,14 @@ class SavingsAccount(Account):
         else:
             self._currentBalance-=withdrawnMoney
             return withdrawnMoney
+
+class CheckingAccount(Account):
+    def __init__(self, accountNumber, accountHolderName, rateOfInterest, currentBalance, overdraft):
+        super().__init__('checking',accountNumber, accountHolderName, rateOfInterest, currentBalance)
+        self._overdraft = overdraft
+    def withdraw(self, withdrawnmoney):
+        if withdrawnmoney > self._currentBalance + self._overdraft:
+            return 'Transaction Rejected'
+        else:
+            self._currentBalance -= withdrawnmoney
+            return withdrawnmoney
