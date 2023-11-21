@@ -21,3 +21,28 @@ class Application:
             else:
                 print('Exit')
                 break
+
+def showAccountMenu(accountno,bank):
+    while True:            
+        choice = int(input('enter choice from 1.check balance, 2.deposit, 3.withdraw, 4.Exit account; '))
+        if choice == 1:
+            for i in bank.getlist():
+                if i.getAccountNumber() == accountno:
+                    print('The current balance of the account is', i.getCurrentBalance())
+        elif choice ==2:
+            money = int(input('enter the money to be deposited; '))
+            bank.addDeposit(accountno,money)
+            print(bank.getlist())
+        elif choice == 3:
+            account = bank.searchAccount(accountno)
+            account_type = account.getAccountType()
+            money = int(input('enter the amount of money to be withdrawn; '))
+            result = account.withdraw(money)
+            if(result == 'Transaction Rejected'):
+                print(result)
+            else:
+                print(result, 'withdrawn.')      
+              
+        else:
+            print('Exiting the account')
+            break
